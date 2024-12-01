@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7A4FE8832CEF736B00F62957 /* Swift Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift Weather App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A4FE8932CEF736C00F62957 /* Swift Weather AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift Weather AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A4FE89D2CEF736C00F62957 /* Swift Weather AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift Weather AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A4FE8832CEF736B00F62957 /* Swift Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Swift Weather App.app"; path = "/Users/jaycalderon/Documents/code/semester3/ios-dev/Swift Weather App/build/Debug-iphoneos/Swift Weather App.app"; sourceTree = "<absolute>"; };
+		7A4FE8932CEF736C00F62957 /* Swift Weather AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Swift Weather AppTests.xctest"; path = "/Users/jaycalderon/Documents/code/semester3/ios-dev/Swift Weather App/build/Debug-iphoneos/Swift Weather App.app/PlugIns/Swift Weather AppTests.xctest"; sourceTree = "<absolute>"; };
+		7A4FE89D2CEF736C00F62957 /* Swift Weather AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Swift Weather AppUITests.xctest"; path = "/Users/jaycalderon/Documents/code/semester3/ios-dev/Swift Weather App/build/Debug-iphoneos/Swift Weather AppUITests-Runner.app/PlugIns/Swift Weather AppUITests.xctest"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,21 +75,10 @@
 		7A4FE87A2CEF736B00F62957 = {
 			isa = PBXGroup;
 			children = (
-				7A4FE8852CEF736B00F62957 /* Swift Weather App */,
 				7A4FE8962CEF736C00F62957 /* Swift Weather AppTests */,
 				7A4FE8A02CEF736C00F62957 /* Swift Weather AppUITests */,
-				7A4FE8842CEF736B00F62957 /* Products */,
+				7A4FE8852CEF736B00F62957 /* Swift Weather App */,
 			);
-			sourceTree = "<group>";
-		};
-		7A4FE8842CEF736B00F62957 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7A4FE8832CEF736B00F62957 /* Swift Weather App.app */,
-				7A4FE8932CEF736C00F62957 /* Swift Weather AppTests.xctest */,
-				7A4FE89D2CEF736C00F62957 /* Swift Weather AppUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +185,7 @@
 			mainGroup = 7A4FE87A2CEF736B00F62957;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 7A4FE8842CEF736B00F62957 /* Products */;
+			productRefGroup = 7A4FE87A2CEF736B00F62957;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
