@@ -11,6 +11,9 @@ struct CityListView: View {
     // observe the view model for changes
     @StateObject private var viewModel = WeatherViewModel()
     
+    // state to control search sheet presentation
+    @State private var isShowingSearch = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -39,19 +42,23 @@ struct CityListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        // navigation to search will be implemented next
+                        isShowingSearch = true
                     }) {
                         Image(systemName: "plus")
                             .foregroundColor(.white)
                     }
                 }
-                
+                            
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Text("Settings")) {
                         Image(systemName: "gearshape")
                             .foregroundColor(.white)
                     }
                 }
+            }
+            // move sheet modifier to the correct level
+            .sheet(isPresented: $isShowingSearch) {
+                SearchView(viewModel: viewModel)
             }
         }
     }

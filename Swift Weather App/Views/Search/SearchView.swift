@@ -12,7 +12,7 @@ struct SearchView: View {
     @Environment(\.dismiss) private var dismiss
     
     // view model for handling weather data and city operations
-    @StateObject private var viewModel: WeatherViewModel
+    @ObservedObject var viewModel: WeatherViewModel
     
     // state for handling search input
     @State private var searchText = ""
@@ -20,6 +20,11 @@ struct SearchView: View {
     // predefined list of popular cities for quick access
     private let popularCities = ["Tehran", "New York", "Dubai", "London"]
     
+    // init is now public by default
+    init(viewModel: WeatherViewModel) {
+        self._viewModel = ObservedObject(wrappedValue: viewModel)
+    }
+
     var body: some View {
         NavigationView {
             ZStack {
