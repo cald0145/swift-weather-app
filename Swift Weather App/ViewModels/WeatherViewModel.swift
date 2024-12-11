@@ -11,31 +11,49 @@ import SwiftUI
 // manages the weather data and business logic
 @MainActor
 class WeatherViewModel: ObservableObject {
-    // published properties will automatically update the ui
     @Published var savedCities: [WeatherData] = []
+    @Published var searchResults: [WeatherData] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
-
-    // temporary initialization with sample data
-    init() {
-        // add sample data for testing
-        savedCities = [
-            WeatherData(cityName: "Ottawa", temperature: -1, condition: "Mostly Clear", localTime: Date()),
-            WeatherData(cityName: "Santo Domingo", temperature: 26, condition: "Cloudy", localTime: Date()),
-            WeatherData(cityName: "Buenos Aires", temperature: 19, condition: "Drizzle", localTime: Date()),
-            WeatherData(cityName: "Barcelona", temperature: 8, condition: "Feels like 5", localTime: Date())
-        ]
+    
+    private let weatherService = WeatherService()
+    
+    // search cities using the api
+    func searchCities(query: String) async {
+        guard !query.trimmed.isEmpty else {
+            searchResults = []
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            searchResults = try await weatherService.searchCity(query)
+        } catch {
+            errorMessage = "failed to search cities: \(error.localizedDescription)"
+            searchResults = []
+        }
+        
+        isLoading = false
     }
-
-    // function to format the time for display
-    func formatTime(date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+    
+    // add city to saved list
+    func addCity(_ city: WeatherData) {
+        if !savedCities.contains(where: { $0.cityName == city.cityName }) {
+            savedCities.append(city)
+        }
     }
-
-    // function to remove a city
+    
+    // remove city from saved list
     func removeCity(_ city: WeatherData) {
         savedCities.removeAll { $0.id == city.id }
+    }
+}
+
+// string extension for trimming
+extension String {
+    var trimmed: String {
+        trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

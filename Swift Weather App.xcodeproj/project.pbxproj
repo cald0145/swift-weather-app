@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7A4FE8832CEF736B00F62957 /* Swift Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Swift Weather App.app"; path = "/Users/jaycalderon/Documents/code/semester3/ios-dev/Swift Weather App/build/Debug-iphoneos/Swift Weather App.app"; sourceTree = "<absolute>"; };
-		7A4FE8932CEF736C00F62957 /* Swift Weather AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Swift Weather AppTests.xctest"; path = "/Users/jaycalderon/Documents/code/semester3/ios-dev/Swift Weather App/build/Debug-iphoneos/Swift Weather App.app/PlugIns/Swift Weather AppTests.xctest"; sourceTree = "<absolute>"; };
-		7A4FE89D2CEF736C00F62957 /* Swift Weather AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Swift Weather AppUITests.xctest"; path = "/Users/jaycalderon/Documents/code/semester3/ios-dev/Swift Weather App/build/Debug-iphoneos/Swift Weather AppUITests-Runner.app/PlugIns/Swift Weather AppUITests.xctest"; sourceTree = "<absolute>"; };
+		7AA499252D09841C005FAB0C /* Swift Weather App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift Weather App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AA499262D09841C005FAB0C /* Swift Weather AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift Weather AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AA499272D09841C005FAB0C /* Swift Weather AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift Weather AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,6 +78,9 @@
 				7A4FE8962CEF736C00F62957 /* Swift Weather AppTests */,
 				7A4FE8A02CEF736C00F62957 /* Swift Weather AppUITests */,
 				7A4FE8852CEF736B00F62957 /* Swift Weather App */,
+				7AA499252D09841C005FAB0C /* Swift Weather App.app */,
+				7AA499262D09841C005FAB0C /* Swift Weather AppTests.xctest */,
+				7AA499272D09841C005FAB0C /* Swift Weather AppUITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +106,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Swift Weather App";
-			productReference = 7A4FE8832CEF736B00F62957 /* Swift Weather App.app */;
+			productReference = 7AA499252D09841C005FAB0C /* Swift Weather App.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7A4FE8922CEF736C00F62957 /* Swift Weather AppTests */ = {
@@ -126,7 +129,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Swift Weather AppTests";
-			productReference = 7A4FE8932CEF736C00F62957 /* Swift Weather AppTests.xctest */;
+			productReference = 7AA499262D09841C005FAB0C /* Swift Weather AppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		7A4FE89C2CEF736C00F62957 /* Swift Weather AppUITests */ = {
@@ -149,7 +152,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Swift Weather AppUITests";
-			productReference = 7A4FE89D2CEF736C00F62957 /* Swift Weather AppUITests.xctest */;
+			productReference = 7AA499272D09841C005FAB0C /* Swift Weather AppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */

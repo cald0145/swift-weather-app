@@ -61,7 +61,9 @@ struct CityListView: View {
 struct CityWeatherCard: View {
     let city: WeatherData
     let onDelete: () -> Void
-    @ObservedObject private var viewModel = WeatherViewModel()
+    
+    // note: remove @ObservedObject since we don't need to observe changes here
+    // we'll use a static formatting method instead
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -91,7 +93,8 @@ struct CityWeatherCard: View {
                 .font(.title2)
                 .foregroundColor(.white)
             
-            Text(viewModel.formatTime(date: city.localTime))
+            // using static date formatter
+            Text(Self.formatTime(date: city.localTime))
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.7))
             
@@ -103,6 +106,13 @@ struct CityWeatherCard: View {
         .background(Color.white.opacity(0.1))
         .cornerRadius(15)
         .padding(.horizontal)
+    }
+    
+    // helper method to format time
+    private static func formatTime(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
 }
 
