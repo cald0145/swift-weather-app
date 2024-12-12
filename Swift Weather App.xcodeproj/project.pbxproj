@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7AA4995D2D0AE4DF005FAB0C /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA4995B2D0AE4D9005FAB0C /* Config.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		7A4FE8942CEF736C00F62957 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,6 +33,8 @@
 		7AA499272D09841C005FAB0C /* Swift Weather AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift Weather AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AA499512D0AE2B5005FAB0C /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7AA499552D0AE47F005FAB0C /* Config.xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.xcconfig.template; sourceTree = "<group>"; };
+		7AA4995B2D0AE4D9005FAB0C /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		7AA4995E2D0AE6D4005FAB0C /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -91,7 +97,9 @@
 		7AA499542D0AE440005FAB0C /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				7AA4995E2D0AE6D4005FAB0C /* Config.xcconfig */,
 				7AA499552D0AE47F005FAB0C /* Config.xcconfig.template */,
+				7AA4995B2D0AE4D9005FAB0C /* Config.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -240,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AA4995D2D0AE4DF005FAB0C /* Config.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

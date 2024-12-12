@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
     // environment values
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss: DismissAction
     
     // view model for handling weather data and city operations
     @ObservedObject var viewModel: WeatherViewModel
