@@ -39,6 +39,7 @@ Carthage/Build/
 # Configuration files
 Config/Config.xcconfig
 *.xcconfig
+Config.xcconfig
 
 # macOS
 .DS_Store

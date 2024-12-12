@@ -29,7 +29,6 @@
 		7AA499272D09841C005FAB0C /* Swift Weather AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Swift Weather AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AA499512D0AE2B5005FAB0C /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7AA499552D0AE47F005FAB0C /* Config.xcconfig.template */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.xcconfig.template; sourceTree = "<group>"; };
-		7AA499562D0AE49A005FAB0C /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -92,7 +91,6 @@
 		7AA499542D0AE440005FAB0C /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				7AA499562D0AE49A005FAB0C /* Config.xcconfig */,
 				7AA499552D0AE47F005FAB0C /* Config.xcconfig.template */,
 			);
 			path = Config;
