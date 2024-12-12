@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CityListView: View {
     // observe the view model for changes
-    @StateObject private var viewModel = WeatherViewModel()
+    @StateObject var viewModel = WeatherViewModel()
     
     // state to control search sheet presentation
     @State private var isShowingSearch = false

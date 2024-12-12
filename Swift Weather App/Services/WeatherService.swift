@@ -9,8 +9,7 @@ import Foundation
 
 // handles all api calls to openweather
 actor WeatherService {
-    // replace with your actual api key
-    private let apiKey = "API_KEY"
+    private let apiKey = "WEATHER_API_KEY"
     private let baseURL = "https://api.openweathermap.org/data/2.5"
     
     // search for cities

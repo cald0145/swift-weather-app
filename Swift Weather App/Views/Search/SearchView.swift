@@ -14,13 +14,13 @@ struct SearchView: View {
     // view model for handling weather data and city operations
     @ObservedObject var viewModel: WeatherViewModel
     
-    // state for handling search input
+    // state for search input
     @State private var searchText = ""
     
     // predefined list of popular cities for quick access
-    private let popularCities = ["Tehran", "New York", "Dubai", "London"]
+    private let popularCities = ["Toronto", "New York", "Dubai", "London"]
     
-    // init is now public by default
+    // init public by default
     init(viewModel: WeatherViewModel) {
         self._viewModel = ObservedObject(wrappedValue: viewModel)
     }
@@ -39,85 +39,84 @@ struct SearchView: View {
                 )
                 .ignoresSafeArea()
                 
-                VStack(spacing: 20) {
-                    // search input field with magnifying glass icon
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                        TextField("Search for a city...", text: $searchText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            // trigger search when text changes using new ios 17 syntax
-                            .onChange(of: searchText, initial: false) { _, newValue in
-                                Task {
-                                    await viewModel.searchCities(query: newValue)
-                                }
-                            }
-                    }
-                    .padding()
-                    
-                    // popular cities quick select section
-                    VStack(alignment: .leading) {
-                        Text("Popular Cities")
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
-                        
-                        // horizontal scrolling list of popular cities
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
-                                ForEach(popularCities, id: \.self) { city in
-                                    Button {
-                                        Task {
-                                            await addPopularCity(city)
-                                        }
-                                    } label: {
-                                        Text(city)
-                                            .padding(.horizontal, 16)
-                                            .padding(.vertical, 8)
-                                            .background(Color.white.opacity(0.2))
-                                            .cornerRadius(20)
-                                            .foregroundColor(.white)
+                VStack(spacing: 0) {
+                    // fixed top section with search and popular cities!!!
+                    VStack(spacing: 20) {
+                        // search input field with magnifying glass icon
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                            TextField("Search for a city!", text: $searchText)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .onChange(of: searchText, initial: false) { _, newValue in
+                                    Task {
+                                        await viewModel.searchCities(query: newValue)
                                     }
                                 }
+                        }
+                        .padding()
+                        
+                        // popular cities quick select section
+                        VStack(alignment: .leading) {
+                            Text("Popular Cities")
+                                .foregroundColor(.white)
+                                .padding(.horizontal)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 10) {
+                                    ForEach(popularCities, id: \.self) { city in
+                                        Button {
+                                            Task {
+                                                await addPopularCity(city)
+                                            }
+                                        } label: {
+                                            Text(city)
+                                                .padding(.horizontal, 16)
+                                                .padding(.vertical, 8)
+                                                .background(Color.white.opacity(0.2))
+                                                .cornerRadius(20)
+                                                .foregroundColor(.white)
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
                         }
                     }
+                    .padding(.vertical)
+                    .background(Color.clear)
                     
-                    // search results section with loading and error states
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .tint(.white)
-                    } else if let error = viewModel.errorMessage {
-                        Text(error)
-                            .foregroundColor(.red)
-                            .padding()
-                    } else {
-                        // scrollable list of search results
-                        ScrollView {
-                            VStack(spacing: 0) {
+                    // scrollable content area
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            // status and results section
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .tint(.white)
+                            } else if let error = viewModel.errorMessage {
+                                Text(error)
+                                    .foregroundColor(.red.opacity(0.8))
+                                    .padding()
+                            } else if !searchText.isEmpty {
+                                // show search results
                                 ForEach(viewModel.searchResults) { city in
-                                    Button {
+                                    CityRowView(city: city) {
                                         viewModel.addCity(city)
                                         dismiss()
-                                    } label: {
-                                        HStack {
-                                            Text(city.cityName)
-                                                .foregroundColor(.white)
-                                            Spacer()
-                                            Image(systemName: "plus")
-                                                .foregroundColor(.white)
-                                        }
-                                        .padding()
                                     }
-                                    Divider()
-                                        .background(Color.white.opacity(0.2))
                                 }
+                            } else {
+                                // show recent searches or welcome message
+                                Text("Type to search for a city")
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .padding()
                             }
                         }
+                        .padding(.top)
                     }
                 }
             }
-            .navigationTitle("Search for City")
+            .navigationTitle("Search for a city!")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -130,14 +129,34 @@ struct SearchView: View {
         }
     }
     
-    // helper function to handle selection of popular cities
+    // helper function for adding a city from search
     private func addPopularCity(_ cityName: String) async {
-        // search for the city and add the first result
         await viewModel.searchCities(query: cityName)
         if let city = viewModel.searchResults.first {
             viewModel.addCity(city)
             dismiss()
         }
+    }
+}
+
+// helper view for city row in search results
+struct CityRowView: View {
+    let city: WeatherData
+    let onSelect: () -> Void
+    
+    var body: some View {
+        Button(action: onSelect) {
+            HStack {
+                Text(city.cityName)
+                    .foregroundColor(.white)
+                Spacer()
+                Image(systemName: "plus")
+                    .foregroundColor(.white)
+            }
+            .padding()
+        }
+        Divider()
+            .background(Color.white.opacity(0.2))
     }
 }
 

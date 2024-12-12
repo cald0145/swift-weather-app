@@ -14,7 +14,7 @@ class WeatherViewModel: ObservableObject {
     @Published var savedCities: [WeatherData] = []
     @Published var searchResults: [WeatherData] = []
     @Published var isLoading = false
-    @Published var errorMessage: String?
+    @Published var errorMessage: String? = nil
     
     private let weatherService = WeatherService()
     
@@ -30,8 +30,11 @@ class WeatherViewModel: ObservableObject {
         
         do {
             searchResults = try await weatherService.searchCity(query)
+            if searchResults.isEmpty {
+                errorMessage = "Oops, make sure to enter the city name correctly!"
+            }
         } catch {
-            errorMessage = "failed to search cities: \(error.localizedDescription)"
+            errorMessage = "Sorry, no city found. Please try again."
             searchResults = []
         }
         
