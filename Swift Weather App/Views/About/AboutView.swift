@@ -28,7 +28,7 @@ struct AboutView: View {
             // about content
             VStack(spacing: 20) {
                 // profile image with easter egg
-                Image(showEasterEgg ? "baby-jay" : "jay-profile")
+                Image(showEasterEgg ? "baby-jay-crying" : "jay-silo")
                     .resizable()
                     .scaledToFill()
                     .frame(width: 200, height: 200)
