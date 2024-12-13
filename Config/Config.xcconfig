@@ -5,4 +5,7 @@
 //  Created by Jay Calderon on 2024-12-12.
 //
 
-OPENWEATHER_API_KEY = 
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+OPENWEATHER_API_KEY =

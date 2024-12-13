@@ -31,13 +31,13 @@ struct SearchView: View {
                 // create a gradient background for visual appeal
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color(#colorLiteral(red: 0.4, green: 0.6, blue: 0.9, alpha: 1)),
-                        Color(#colorLiteral(red: 0.2, green: 0.3, blue: 0.7, alpha: 1))
+                        Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)),
+                        Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1))
                     ]),
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .ignoresSafeArea()
+                .ignoresSafeArea(.all)
                 
                 VStack(spacing: 0) {
                     // fixed top section with search and popular cities!!!
@@ -120,10 +120,10 @@ struct SearchView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                            Text("Search for a city!")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
+                    Text("Search for a city!")
+                        .foregroundColor(.white)
+                        .font(.headline)
+                }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.left")

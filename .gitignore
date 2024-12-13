@@ -1,14 +1,11 @@
-//
-//  .gitignore
-//  Swift Weather App
-//
-//  Created by Jay Calderon on 2024-12-12.
-//
-
 # Xcode
-##
+.DS_Store
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
 build/
 DerivedData/
+*.moved-aside
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -17,13 +14,11 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata/
-*.xccheckout
-*.moved-aside
-*.xcuserstate
-*.xcscmblueprint
-*.xcworkspace/xcshareddata/
-*.xcworkspace/xcuserdata/
+
+# Config files
+Config/Config.xcconfig
+*.xcconfig
+!Config.xcconfig.template
 
 # Swift Package Manager
 .build/
@@ -36,31 +31,7 @@ Pods/
 # Carthage
 Carthage/Build/
 
-# Configuration files
-Config/Config.xcconfig
-*.xcconfig
-Config.xcconfig
-
-# macOS
+# General
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk

@@ -11,6 +11,8 @@ struct CityListView: View {
     // observe the view model for weather data updates
     @ObservedObject var viewModel: WeatherViewModel
     @StateObject private var settingsViewModel = SettingsViewModel()
+    @State private var selectedCity: WeatherData?
+    @State private var showingError = false
     
     // state to control search sheet presentation
     @State private var isShowingSearch = false
@@ -29,6 +31,13 @@ struct CityListView: View {
                 )
                 .ignoresSafeArea(.all)
                 
+                if viewModel.isLoading {
+                    // loading state
+                    ProgressView("Updating weather data...")
+                        .tint(.white)
+                        .foregroundColor(.white)
+                } else {}
+                
                 // scrollable list of city cards
                 ScrollView {
                     VStack(spacing: 20) {
@@ -36,9 +45,18 @@ struct CityListView: View {
                             CityWeatherCard(city: city, onDelete: {
                                 viewModel.removeCity(city)
                             })
+                            .onTapGesture {
+                                Task {
+                                    await selectCity(city)
+                                }
+                            }
                         }
                     }
                     .padding(.top)
+                }
+                .refreshable {
+                    // pull to refresh functionality
+                    await viewModel.refreshWeatherData()
                 }
             }
             // navigation bar styling
@@ -66,6 +84,14 @@ struct CityListView: View {
                     }
                 }
             }
+            .navigationDestination(item: $selectedCity) { city in
+                WeatherDetailView(weather: city)
+            }
+            .alert("Error", isPresented: $showingError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.errorMessage ?? "Oops, an error occurred.")
+            }
             .sheet(isPresented: $isShowingSearch) {
                 SearchView(viewModel: viewModel)
             }
@@ -73,6 +99,19 @@ struct CityListView: View {
                 // weather updates when view is shown
                 viewModel.startWeatherUpdates()
             }
+        }
+    }
+    
+    // handle city selection
+    
+    private func selectCity(_ city: WeatherData) async {
+        do {
+            // fetch detailed weather data before showing detail view
+            let detailedCity = try await viewModel.getDetailedWeatherData(for: city)
+            selectedCity = detailedCity
+        } catch {
+            showingError = true
+            viewModel.errorMessage = error.localizedDescription
         }
     }
     
@@ -135,6 +174,7 @@ struct CityListView: View {
             .background(Color.white.opacity(0.1))
             .cornerRadius(15)
             .padding(.horizontal)
+            .contentShape(Rectangle())
         }
         
         // helper method to format the time display

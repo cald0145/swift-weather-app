@@ -1,17 +1,7 @@
-//
-//  WeatherService.swift
-//  Swift Weather App
-//
-//  Created by Jay Calderon on 2024-12-11.
-//
-
 import Foundation
 
-// handles all api calls to openweather
 actor WeatherService {
-    //// FOR VLADIMIR: put your openweather api key here!
-    ///
-    private let apiKey = "OPENWEATHER_API_KEY"
+    private let apiKey: String = "OPENWEATHER_API_KEY"
     private let baseURL = "https://api.openweathermap.org/data/2.5"
     
     // search for cities
@@ -37,13 +27,66 @@ actor WeatherService {
         let decoder = JSONDecoder()
         let weatherResponse = try decoder.decode(OpenWeatherResponse.self, from: data)
         
+        // updated to include coordinates
         return [WeatherData(
             cityName: weatherResponse.name,
             temperature: weatherResponse.main.temp,
             condition: weatherResponse.weather.first?.description ?? "",
             weatherIcon: mapWeatherIcon(weatherResponse.weather.first?.icon ?? ""),
-            timezone: weatherResponse.timezone
+            timezone: weatherResponse.timezone,
+            coordinates: WeatherData.Coordinates(
+                latitude: weatherResponse.coord.lat,
+                longitude: weatherResponse.coord.lon
+            )
         )]
+    }
+    
+    func fetchDetailedWeather(lat: Double, lon: Double) async throws -> WeatherData {
+        let endpoint = "\(baseURL)/onecall"
+        let queryItems = [
+            URLQueryItem(name: "lat", value: String(lat)),
+            URLQueryItem(name: "lon", value: String(lon)),
+            URLQueryItem(name: "appid", value: apiKey),
+            URLQueryItem(name: "units", value: "metric"),
+            URLQueryItem(name: "exclude", value: "minutely,daily,alerts")
+        ]
+        
+        guard var urlComponents = URLComponents(string: endpoint) else {
+            throw URLError(.badURL)
+        }
+        
+        urlComponents.queryItems = queryItems
+        
+        guard let url = urlComponents.url else {
+            throw URLError(.badURL)
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(OpenWeatherOneCallResponse.self, from: data)
+        
+        // map response to weather data
+        return WeatherData(
+            cityName: response.timezone,
+            temperature: response.current.temp,
+            condition: response.current.weather.first?.description ?? "",
+            weatherIcon: mapWeatherIcon(response.current.weather.first?.icon ?? ""),
+            uvIndex: response.current.uvi,
+            windSpeed: response.current.windSpeed,
+            humidity: response.current.humidity,
+            timezone: response.timezoneOffset,
+            coordinates: WeatherData.Coordinates(
+                latitude: lat,
+                longitude: lon
+            ),
+            hourlyForecast: response.hourly.prefix(6).map { hourly in
+                WeatherData.HourlyForecast(
+                    time: Date(timeIntervalSince1970: hourly.dt),
+                    temperature: hourly.temp,
+                    condition: hourly.weather.first?.description ?? "",
+                    icon: mapWeatherIcon(hourly.weather.first?.icon ?? "")
+                )
+            }
+        )
     }
     
     // map openweather icons to sf symbols
@@ -72,9 +115,42 @@ struct OpenWeatherResponse: Codable {
     let main: Main
     let weather: [Weather]
     let timezone: Int
+    let coord: Coordinates // add this
     
     struct Main: Codable {
         let temp: Double
+    }
+    
+    struct Weather: Codable {
+        let description: String
+        let icon: String
+    }
+    
+    struct Coordinates: Codable {
+        let lat: Double
+        let lon: Double
+    }
+}
+
+// separate response model for onecall api
+struct OpenWeatherOneCallResponse: Codable {
+    let timezone: String
+    let timezoneOffset: Int
+    let current: Current
+    let hourly: [Hourly]
+    
+    struct Current: Codable {
+        let temp: Double
+        let humidity: Double
+        let uvi: Double
+        let windSpeed: Double
+        let weather: [Weather]
+    }
+    
+    struct Hourly: Codable {
+        let dt: TimeInterval
+        let temp: Double
+        let weather: [Weather]
     }
     
     struct Weather: Codable {

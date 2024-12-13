@@ -8,8 +8,6 @@
 import Foundation
 import SwiftUI
 
-// manages the weather data and business logic
-@MainActor
 class WeatherViewModel: ObservableObject {
     @Published var savedCities: [WeatherData] = []
     @Published var searchResults: [WeatherData] = []
@@ -19,6 +17,47 @@ class WeatherViewModel: ObservableObject {
     private let weatherService = WeatherService()
     private var updateTimer: Timer?
     private var timeUpdateTimer: Timer?
+    
+    func getDetailedWeatherData(for city: WeatherData) async throws -> WeatherData {
+        isLoading = true
+        errorMessage = nil
+            
+        do {
+            let detailedData = try await weatherService.fetchDetailedWeather(
+                lat: city.coordinates.latitude,
+                lon: city.coordinates.longitude
+            )
+            isLoading = false
+            return detailedData
+        } catch {
+            isLoading = false
+            errorMessage = "Failed to fetch detailed weather data: \(error.localizedDescription)"
+            throw error
+        }
+    }
+    
+    // refresh all cities weather data
+    func refreshWeatherData() async {
+        isLoading = true
+        errorMessage = nil
+            
+        do {
+            // update each city's weather data
+            var updatedCities: [WeatherData] = []
+            for city in savedCities {
+                let updated = try await weatherService.fetchDetailedWeather(
+                    lat: city.coordinates.latitude,
+                    lon: city.coordinates.longitude
+                )
+                updatedCities.append(updated)
+            }
+            savedCities = updatedCities
+        } catch {
+            errorMessage = "Failed to refresh weather data: \(error.localizedDescription)"
+        }
+            
+        isLoading = false
+    }
     
     // start temperature update timer
     func startWeatherUpdates() {
@@ -36,7 +75,6 @@ class WeatherViewModel: ObservableObject {
         }
     }
     
-        
     // update all cities weather data
     private func updateAllCities() async {
         for (index, city) in savedCities.enumerated() {
@@ -46,7 +84,6 @@ class WeatherViewModel: ObservableObject {
         }
     }
         
-
     // search cities using the api
     func searchCities(query: String) async {
         guard !query.trimmed.isEmpty else {
