@@ -45,7 +45,7 @@ struct SearchView: View {
                         // search input field with magnifying glass icon
                         HStack {
                             Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white)
                             TextField("Search for a city!", text: $searchText)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .onChange(of: searchText, initial: false) { _, newValue in
@@ -119,6 +119,11 @@ struct SearchView: View {
             .navigationTitle("Search for a city!")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                            Text("Search for a city!")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.left")

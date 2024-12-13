@@ -17,7 +17,54 @@ class WeatherViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     
     private let weatherService = WeatherService()
+    private var updateTimer: Timer?
+    private var timeUpdateTimer: Timer?
     
+    init() {
+        // start local time updates
+        startTimeUpdates()
+    }
+    
+    // start temperature update timer
+    func startWeatherUpdates() {
+        // cancel existing timer
+        updateTimer?.invalidate()
+            
+        // get interval from settings
+        let interval = UserDefaults.standard.integer(forKey: "refreshInterval")
+            
+        // create new timer
+        updateTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(interval), repeats: true) { [weak self] _ in
+            Task {
+                await self?.updateAllCities()
+            }
+        }
+    }
+        
+    // start local time update timer
+    private func startTimeUpdates() {
+        timeUpdateTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            self?.updateLocalTimes()
+        }
+    }
+        
+    // update all cities weather data
+    private func updateAllCities() async {
+        for (index, city) in savedCities.enumerated() {
+            if let updatedCity = try? await weatherService.searchCity(city.cityName).first {
+                savedCities[index] = updatedCity
+            }
+        }
+    }
+        
+    // update local times
+    private func updateLocalTimes() {
+        // simulate time update by adding one minute to each city
+        for index in savedCities.indices {
+            savedCities[index].localTime = Calendar.current.date(byAdding: .minute, value: 1, to: savedCities[index].localTime) ?? savedCities[index].localTime
+        }
+    }
+
     // search cities using the api
     func searchCities(query: String) async {
         guard !query.trimmed.isEmpty else {
@@ -51,6 +98,11 @@ class WeatherViewModel: ObservableObject {
     // remove city from saved list
     func removeCity(_ city: WeatherData) {
         savedCities.removeAll { $0.id == city.id }
+    }
+    
+    deinit {
+        updateTimer?.invalidate()
+        timeUpdateTimer?.invalidate()
     }
 }
 
