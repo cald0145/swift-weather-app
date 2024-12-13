@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AboutView: View {
     @Environment(\.presentationMode) var presentationMode
+    @State private var tapCount = 0
+    @State private var showEasterEgg = false
     
     var body: some View {
         ZStack {
@@ -25,10 +27,24 @@ struct AboutView: View {
             
             // about content
             VStack(spacing: 20) {
-                Image(systemName: "cloud.sun.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.white)
+                // profile image with easter egg
+                Image(showEasterEgg ? "baby-jay" : "jay-profile")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 200, height: 200)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                    .shadow(radius: 5)
                     .padding()
+                    .onTapGesture {
+                        tapCount += 1
+                        if tapCount >= 3 {
+                            withAnimation(.spring()) {
+                                showEasterEgg.toggle()
+                            }
+                            tapCount = 0
+                        }
+                    }
                 
                 Text("Swift Weather App")
                     .font(.title)
