@@ -9,7 +9,6 @@ import Foundation
 
 // handles all api calls to openweather
 actor WeatherService {
-    
     //// FOR VLADIMIR: put your openweather api key here!
     ///
     private let apiKey = "OPENWEATHER_API_KEY"
@@ -42,7 +41,8 @@ actor WeatherService {
             cityName: weatherResponse.name,
             temperature: weatherResponse.main.temp,
             condition: weatherResponse.weather.first?.description ?? "",
-            weatherIcon: mapWeatherIcon(weatherResponse.weather.first?.icon ?? "")
+            weatherIcon: mapWeatherIcon(weatherResponse.weather.first?.icon ?? ""),
+            timezone: weatherResponse.timezone
         )]
     }
     
@@ -71,6 +71,7 @@ struct OpenWeatherResponse: Codable {
     let name: String
     let main: Main
     let weather: [Weather]
+    let timezone: Int
     
     struct Main: Codable {
         let temp: Double

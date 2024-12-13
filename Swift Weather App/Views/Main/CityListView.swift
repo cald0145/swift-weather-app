@@ -47,10 +47,10 @@ struct CityListView: View {
             .toolbarBackground(Color(#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)), for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                            Text("Jay's Weather App")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
+                    Text("Jay's Weather App")
+                        .foregroundColor(.white)
+                        .font(.headline)
+                }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { isShowingSearch = true }) {
@@ -80,6 +80,7 @@ struct CityListView: View {
     struct CityWeatherCard: View {
         let city: WeatherData
         let onDelete: () -> Void
+        @StateObject private var timeManager = TimeManager()
         
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
@@ -95,7 +96,7 @@ struct CityListView: View {
                             .font(.system(size: 20, weight: .medium))
                             .foregroundColor(.white.opacity(0.7))
                         
-                        Text(Self.formatTime(date: city.localTime))
+                        Text(timeManager.formatTime(for: city.timezone))
                             .font(.subheadline)
                             .foregroundColor(.white.opacity(0.7))
                     }
@@ -151,4 +152,3 @@ struct CityListView: View {
         }
     }
 }
-

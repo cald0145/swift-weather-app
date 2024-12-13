@@ -20,11 +20,6 @@ class WeatherViewModel: ObservableObject {
     private var updateTimer: Timer?
     private var timeUpdateTimer: Timer?
     
-    init() {
-        // start local time updates
-        startTimeUpdates()
-    }
-    
     // start temperature update timer
     func startWeatherUpdates() {
         // cancel existing timer
@@ -40,13 +35,7 @@ class WeatherViewModel: ObservableObject {
             }
         }
     }
-        
-    // start local time update timer
-    private func startTimeUpdates() {
-        timeUpdateTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
-            self?.updateLocalTimes()
-        }
-    }
+    
         
     // update all cities weather data
     private func updateAllCities() async {
@@ -57,13 +46,6 @@ class WeatherViewModel: ObservableObject {
         }
     }
         
-    // update local times
-    private func updateLocalTimes() {
-        // simulate time update by adding one minute to each city
-        for index in savedCities.indices {
-            savedCities[index].localTime = Calendar.current.date(byAdding: .minute, value: 1, to: savedCities[index].localTime) ?? savedCities[index].localTime
-        }
-    }
 
     // search cities using the api
     func searchCities(query: String) async {
