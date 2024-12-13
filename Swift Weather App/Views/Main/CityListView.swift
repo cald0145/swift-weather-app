@@ -16,6 +16,7 @@ struct CityListView: View {
     
     // state to control search sheet presentation
     @State private var isShowingSearch = false
+    @State private var isEditing = false
     
     var body: some View {
         NavigationView {
@@ -36,27 +37,36 @@ struct CityListView: View {
                     ProgressView("Updating weather data...")
                         .tint(.white)
                         .foregroundColor(.white)
-                } else {}
-                
-                // scrollable list of city cards
-                ScrollView {
-                    VStack(spacing: 20) {
+                } else {
+                    List {
                         ForEach(viewModel.savedCities) { city in
-                            CityWeatherCard(city: city, onDelete: {
-                                viewModel.removeCity(city)
-                            })
-                            .onTapGesture {
-                                Task {
-                                    await selectCity(city)
+                            CityWeatherCard(city: city)
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        withAnimation {
+                                            viewModel.removeCity(city)
+                                        }
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
                                 }
-                            }
+                                .onTapGesture {
+                                    Task {
+                                        await selectCity(city)
+                                    }
+                                }
+                        }
+                        .onMove { from, to in
+                            viewModel.savedCities.move(fromOffsets: from, toOffset: to)
                         }
                     }
-                    .padding(.top)
-                }
-                .refreshable {
-                    // pull to refresh functionality
-                    await viewModel.refreshWeatherData()
+                    .listStyle(.plain)
+                    .refreshable {
+                        await viewModel.refreshWeatherData()
+                    }
+                    .environment(\.editMode, .constant(isEditing ? EditMode.active : EditMode.inactive))
                 }
             }
             // navigation bar styling
@@ -73,6 +83,17 @@ struct CityListView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { isShowingSearch = true }) {
                         Image(systemName: "plus")
+                            .foregroundColor(.white)
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        withAnimation {
+                            isEditing.toggle()
+                        }
+                    }) {
+                        Text(isEditing ? "Done" : "Edit")
                             .foregroundColor(.white)
                     }
                 }
@@ -103,7 +124,6 @@ struct CityListView: View {
     }
     
     // handle city selection
-    
     private func selectCity(_ city: WeatherData) async {
         do {
             // fetch detailed weather data before showing detail view
@@ -118,7 +138,6 @@ struct CityListView: View {
     // city weather card
     struct CityWeatherCard: View {
         let city: WeatherData
-        let onDelete: () -> Void
         @StateObject private var timeManager = TimeManager()
         
         var body: some View {
@@ -160,28 +179,11 @@ struct CityListView: View {
                         .foregroundColor(.white)
                     }
                 }
-                
-                // delete button aligned to the right!
-                HStack {
-                    Spacer()
-                    Button(action: onDelete) {
-                        Image(systemName: "trash")
-                            .foregroundColor(.white.opacity(0.7))
-                    }
-                }
             }
             .padding()
             .background(Color.white.opacity(0.1))
             .cornerRadius(15)
-            .padding(.horizontal)
             .contentShape(Rectangle())
-        }
-        
-        // helper method to format the time display
-        private static func formatTime(date: Date) -> String {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "HH:mm"
-            return formatter.string(from: date)
         }
     }
     

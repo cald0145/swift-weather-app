@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class WeatherViewModel: ObservableObject {
     @Published var savedCities: [WeatherData] = []
     @Published var searchResults: [WeatherData] = []
@@ -21,8 +22,11 @@ class WeatherViewModel: ObservableObject {
     func getDetailedWeatherData(for city: WeatherData) async throws -> WeatherData {
         isLoading = true
         errorMessage = nil
-            
+        
         do {
+            print("Fetching detailed weather for: \(city.cityName)")
+            print("Coordinates: lat: \(city.coordinates.latitude), lon: \(city.coordinates.longitude)")
+            
             let detailedData = try await weatherService.fetchDetailedWeather(
                 lat: city.coordinates.latitude,
                 lon: city.coordinates.longitude
@@ -31,10 +35,16 @@ class WeatherViewModel: ObservableObject {
             return detailedData
         } catch {
             isLoading = false
+            print("Error fetching detailed weather: \(error)")
             errorMessage = "Failed to fetch detailed weather data: \(error.localizedDescription)"
             throw error
         }
     }
+    
+    // reorder
+        func reorderCities(fromOffsets source: IndexSet, toOffset destination: Int) {
+            savedCities.move(fromOffsets: source, toOffset: destination)
+        }
     
     // refresh all cities weather data
     func refreshWeatherData() async {

@@ -37,7 +37,8 @@ actor WeatherService {
             coordinates: WeatherData.Coordinates(
                 latitude: weatherResponse.coord.lat,
                 longitude: weatherResponse.coord.lon
-            )
+            ),
+            hourlyForecast: []
         )]
     }
     
@@ -64,9 +65,8 @@ actor WeatherService {
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(OpenWeatherOneCallResponse.self, from: data)
         
-        // map response to weather data
         return WeatherData(
-            cityName: response.timezone,
+            cityName: response.timezone.components(separatedBy: "/").last ?? response.timezone,
             temperature: response.current.temp,
             condition: response.current.weather.first?.description ?? "",
             weatherIcon: mapWeatherIcon(response.current.weather.first?.icon ?? ""),
@@ -115,7 +115,7 @@ struct OpenWeatherResponse: Codable {
     let main: Main
     let weather: [Weather]
     let timezone: Int
-    let coord: Coordinates // add this
+    let coord: Coordinates
     
     struct Main: Codable {
         let temp: Double
