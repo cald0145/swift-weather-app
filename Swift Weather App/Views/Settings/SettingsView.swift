@@ -25,42 +25,51 @@ struct SettingsView: View {
             )
             .ignoresSafeArea()
 
-            VStack(spacing: 20) {
-                // refresh interval picker
-                VStack(alignment: .center, spacing: 5) {
+            VStack {
+                // refresh interval section
+                VStack(spacing: 0) {
                     Text("Weather Refresh Interval")
                         .foregroundColor(.white)
                         .font(.headline)
-                        .padding(.horizontal)
+                        .padding(.top, 20)
+                        .padding(.bottom, 10)
 
                     Picker("Refresh Interval", selection: $settingsViewModel.selectedRefreshInterval) {
                         ForEach(SettingsViewModel.refreshIntervals, id: \.self) { interval in
                             Text("\(settingsViewModel.intervalInMinutes(interval)) minutes")
-                                .foregroundColor(.white)
                                 .tag(interval)
                         }
                     }
                     .pickerStyle(WheelPickerStyle())
-                    .padding(.horizontal)
+                    .frame(height: 150)
                 }
                 .background(Color.white.opacity(0.1))
-                .cornerRadius(10)
+                .cornerRadius(15)
                 .padding(.horizontal)
                 .padding(.top, 20)
 
-                Spacer()
-
                 // about navigation
                 NavigationLink(destination: AboutView()) {
-                    Text("About")
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .padding(20)
-                        .background(Color.white.opacity(0.1))
-                        .cornerRadius(10)
+                    HStack {
+                        Text("About")
+                            .foregroundColor(.white)
+                            .font(.headline)
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.white.opacity(0.7))
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.1))
+                    .cornerRadius(15)
                 }
                 .padding(.horizontal)
+                .padding(.top, 30)
+
+                Spacer()
             }
+            .padding(.top, 20)
         }
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)

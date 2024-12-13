@@ -11,22 +11,25 @@ import SwiftUI
 struct WeatherDetailView: View {
     let weather: WeatherData
     @Environment(\.dismiss) private var dismiss
-    @State private var region: MKCoordinateRegion
+    @State private var position: MapCameraPosition
     
     init(weather: WeatherData) {
         self.weather = weather
-        // initialize map region
-        _region = State(initialValue: MKCoordinateRegion(
+        // initialize map camera position
+        _position = State(initialValue: .region(MKCoordinateRegion(
             center: weather.coordinates.location,
             span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-        ))
+        )))
     }
     
     var body: some View {
         ZStack {
-            // map background
-            Map(coordinateRegion: $region, showsUserLocation: true)
-                .ignoresSafeArea()
+            // map background using mapkit implementation
+            Map(position: $position) {
+                UserAnnotation()
+                Marker(weather.cityName, coordinate: weather.coordinates.location)
+            }
+            .ignoresSafeArea()
             
             // temperature-based overlay
             weather.temperatureColor
@@ -72,7 +75,7 @@ struct WeatherDetailView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    // location permission will be implemented later
+                    // location permission!!!
                 }) {
                     Image(systemName: "location")
                         .foregroundColor(.white)
